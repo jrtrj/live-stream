@@ -51,3 +51,6 @@ button:disabled { opacity: 0.4; cursor: default; }
   border-radius: 9px; padding: 10px 14px; margin: 14px 0 0;
   font-size: 13px; background: #fff;
 }
+
+.link { color: var(--clay); font-size: 13px; text-decoration: none; font-weight: 600; }
+.link:hover { text-decoration: underline; }

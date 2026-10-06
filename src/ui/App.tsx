@@ -89,12 +89,23 @@ export function App() {
           return (
             <div className="card" key={i.id}>
               <span className="verb">{i.verb}</span>
-              <span>{i.payload.verb === 'SEND' ? i.payload.item : i.payload.verb}</span>
+              <span>
+                {i.payload.verb === 'SEND'
+                  ? i.payload.item
+                  : i.payload.verb === 'BOOK'
+                    ? i.payload.when_text
+                    : i.payload.code}
+              </span>
               <span className="evidence">“{i.evidence}”</span>
               <span className="mono">
                 {action ? action.status : 'awaiting handler'}
                 {action?.error ? ` — ${action.error}` : ''}
               </span>
+              {action?.status === 'fired' && action.artifact.kind === 'calendar' && (
+                <a className="link" href={action.artifact.ref} target="_blank" rel="noreferrer">
+                  Add to calendar →
+                </a>
+              )}
             </div>
           )
         })}

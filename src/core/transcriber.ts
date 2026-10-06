@@ -16,6 +16,7 @@ export const SCRIPTED_TURNS = [
   'hi, we are looking at the enterprise plan',
   'good, let me walk you through it',
   'send me the brochure',
+  'and let us talk Tuesday at 4',
   'thanks, that is all I needed',
 ] as const
 

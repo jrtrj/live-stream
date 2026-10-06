@@ -16,6 +16,7 @@
     "timeline": "node scripts/timeline.mjs"
   },
   "dependencies": {
+    "chrono-node": "^2.10.2",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "ws": "^8.22.0",

@@ -6,6 +6,7 @@ import { FakeTranscriber, type Transcriber } from './core/transcriber'
 import { FakeExtractor, LlmExtractor, type Extractor } from './core/extractor'
 import { HttpModelClient } from './core/modelClient'
 import { createDispatcher, type Dispatcher } from './core/dispatcher'
+import { bookHandler } from './core/calendar'
 import {
   isTranscript,
   type IntentEvent,
@@ -65,6 +66,8 @@ export function createApp(): App {
           { onError: (message) => { modelNotice = message } },
         )
   const dispatcher = createDispatcher()
+  // T6. The dispatcher is a registry, so this is the whole integration.
+  dispatcher.register('BOOK', bookHandler)
 
   const emitted = new Set<string>()
   let live = false

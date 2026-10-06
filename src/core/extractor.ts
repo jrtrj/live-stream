@@ -93,15 +93,34 @@ export class LlmExtractor implements Extractor {
 export class FakeExtractor implements Extractor {
   async extract(window: TranscriptEvent[]): Promise<ExtractResult[]> {
     const last = window[window.length - 1]
-    if (!last || !/brochure/i.test(last.text)) return []
-    return [
-      {
+    if (!last) return []
+
+    const out: ExtractResult[] = []
+
+    if (/brochure/i.test(last.text)) {
+      out.push({
         speaker: last.speaker,
         verb: 'SEND',
         payload: { verb: 'SEND', item: 'brochure' },
         confidence: 0.9,
         evidence: last.text,
-      },
-    ]
+      })
+    }
+
+    // the timing words, taken verbatim from the line so the payload stays honest
+    const when = last.text.match(
+      /\b(?:this\s+|next\s+)?(?:monday|tuesday|wednesday|thursday|friday|saturday|sunday)\s+at\s+\d{1,2}(?::\d{2})?\s*(?:am|pm)?/i,
+    )
+    if (when) {
+      out.push({
+        speaker: last.speaker,
+        verb: 'BOOK',
+        payload: { verb: 'BOOK', when_text: when[0], label: 'a call' },
+        confidence: 0.88,
+        evidence: last.text,
+      })
+    }
+
+    return out
   }
 }
