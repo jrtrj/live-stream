@@ -295,6 +295,22 @@
     <div class="cell"><div class="k">Cost of the stack</div><div class="v">₹0, on free tiers</div></div>
   </div>
 
+  <!-- ================= STATUS BANNER ================= -->
+  <div class="callout" style="margin-bottom:20px">
+    <strong>Implementation status, 2026-10-06 21:06 IST — 3h 56m into a 24-hour window.</strong>
+    The window opened at 17:10 on 6 October. The plan below was written before it opened and is
+    deliberately left unchanged, so that the disclosure in section&nbsp;14 stays true. Everything
+    that has actually been built is recorded in <strong>Part II</strong>, at the end of this
+    document.
+  </div>
+
+  <div class="summary" style="margin-bottom:14px">
+    <div class="cell"><div class="k">Tickets complete</div><div class="v accent">4 of 11</div></div>
+    <div class="cell"><div class="k">Tests passing</div><div class="v">80</div></div>
+    <div class="cell"><div class="k">Real side effects</div><div class="v">1 of 2</div></div>
+    <div class="cell"><div class="k">Captions</div><div class="v">still scripted</div></div>
+  </div>
+
   <!-- ================= IDEA ================= -->
   <section>
     <div class="sec-head"><span class="num">00</span><h2>The idea we implement</h2></div>
@@ -1365,8 +1381,394 @@ Transcript, last turns:
     </div>
   </section>
 
+
+  <!-- ================= PART II ================= -->
+  <section style="margin-top:78px">
+    <div class="eyebrow" style="margin-bottom:10px">Part II · written during the window</div>
+    <div class="sec-head"><span class="num">19</span><h2>Where the build stands</h2></div>
+    <p class="sec-intro">
+      Every row below is a ticket, its state, and the commit that carries it. Nothing here is a
+      claim without a command behind it — the exact commands and their output are in
+      <code>docs/tickets/</code> in the repository.
+    </p>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Ticket</th><th>State</th><th>Commit</th><th>What actually works</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="mono"><strong>T1</strong> The ground</td>
+            <td><span class="sev low">DONE</span></td>
+            <td class="mono">7d21100</td>
+            <td>The frozen contract, the event bus, and five interfaces each with a working fake behind it.</td>
+          </tr>
+          <tr>
+            <td class="mono"><strong>T2</strong> Real call</td>
+            <td><span class="sev low">DONE</span></td>
+            <td class="mono">73cb834</td>
+            <td>Two browsers connect over WebRTC and carry audio both ways. Signalling room and server, both tested.</td>
+          </tr>
+          <tr>
+            <td class="mono"><strong>T3</strong> Real speech</td>
+            <td><span class="sev med">SERVICE DONE</span></td>
+            <td class="mono">24d6d9f</td>
+            <td>The speech service runs and transcribes. <strong>It is not wired into the application</strong>, so captions remain scripted.</td>
+          </tr>
+          <tr>
+            <td class="mono"><strong>T4</strong> Extraction</td>
+            <td><span class="sev low">DONE</span></td>
+            <td class="mono">93f074f</td>
+            <td>The cheap filter, the model client, the proxy, and five deterministic gates. A hallucinating model is caught.</td>
+          </tr>
+          <tr>
+            <td class="mono"><strong>T5</strong> SEND</td>
+            <td><span class="sev high">NOT BUILT</span></td>
+            <td class="mono">—</td>
+            <td>No handler registered. Blocked on a Twilio account, which needs a person.</td>
+          </tr>
+          <tr>
+            <td class="mono"><strong>T6</strong> BOOK</td>
+            <td><span class="sev low">DONE</span></td>
+            <td class="mono">57a20aa</td>
+            <td>A spoken time resolves to a real instant and produces a working calendar link. The first real side effect.</td>
+          </tr>
+          <tr>
+            <td class="mono"><strong>T7</strong> SHARE</td>
+            <td><span class="sev high">NOT BUILT</span></td>
+            <td class="mono">—</td>
+            <td>Needs no external service. The cheapest remaining ticket.</td>
+          </tr>
+          <tr>
+            <td class="mono"><strong>T8</strong> Receipt</td>
+            <td><span class="sev high">NOT BUILT</span></td>
+            <td class="mono">—</td>
+            <td>Requires T5, so that the receipt has a real action to report.</td>
+          </tr>
+          <tr>
+            <td class="mono"><strong>T9</strong> Signed log</td>
+            <td><span class="sev high">NOT BUILT</span></td>
+            <td class="mono">—</td>
+            <td>Requires T8.</td>
+          </tr>
+          <tr>
+            <td class="mono"><strong>T10</strong> Conference</td>
+            <td><span class="sev high">NOT BUILT</span></td>
+            <td class="mono">—</td>
+            <td>The room already holds a list and <code>PeerManager</code> already takes N peers, so this is additive.</td>
+          </tr>
+          <tr>
+            <td class="mono"><strong>T11</strong> Harden</td>
+            <td><span class="sev high">NOT BUILT</span></td>
+            <td class="mono">—</td>
+            <td>The README and the backup video are the parts the rules actually require.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="sub">Real against mock, as it stands</h3>
+    <p class="sec-intro">
+      This is the table to read before believing anything on screen. It is the fastest way to avoid
+      reviewing a mock as though it were real.
+    </p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Capability</th><th>State</th><th>Consequence today</th></tr></thead>
+        <tbody>
+          <tr><td>The event contract, the bus, the store</td><td><span class="sev low">REAL</span></td><td>The whole system is replayable from the log.</td></tr>
+          <tr><td>Browser-to-browser audio</td><td><span class="sev low">REAL</span></td><td>Two people genuinely hear each other.</td></tr>
+          <tr><td>Signalling room and server</td><td><span class="sev low">REAL</span></td><td>10 of 10 checks pass with real clients.</td></tr>
+          <tr><td>Speech service</td><td><span class="sev low">REAL</span></td><td>Transcribes real audio. Verified end to end.</td></tr>
+          <tr><td>Extraction: filter, model, gates</td><td><span class="sev low">REAL</span></td><td>57 tests, and the gates reject fabrication.</td></tr>
+          <tr><td>BOOK to a calendar</td><td><span class="sev low">REAL</span></td><td>A real link with the right times. The tap is unverified.</td></tr>
+          <tr><td><code>Transcriber</code> in the application</td><td><span class="sev high">FAKE</span></td><td><strong>The page is not listening.</strong> Captions are scripted.</td></tr>
+          <tr><td>Dispatcher handlers</td><td><span class="sev med">ONE OF THREE</span></td><td>BOOK fires. SEND and SHARE report a visible failure.</td></tr>
+          <tr><td>Receipt, latency counter</td><td><span class="sev high">NOT BUILT</span></td><td>No end-of-call artefact.</td></tr>
+          <tr><td>Event store</td><td><span class="sev med">ARRAY ONLY</span></td><td>A reload loses the call.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head"><span class="num">20</span><h2>What the build measured</h2></div>
+    <p class="sec-intro">
+      Several numbers in the plan were estimates. These replaced them, on this machine: an Intel
+      i5-8265U, four cores, no GPU. Re-measure rather than trusting these; they are evidence of a
+      method, not permanent facts.
+    </p>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Question</th><th>Measured</th><th>What it changed</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>Can the local speech model caption live?</td>
+            <td class="mono">base.en 3 s chunk = 1.30 s<br>base.en 15 s file = 1.46 s<br>small.en 3 s chunk = 4.82 s</td>
+            <td><code>small.en</code> runs at 0.6&times; realtime and <strong>cannot caption live at all</strong>. It is out.</td>
+          </tr>
+          <tr>
+            <td>What does a longer window cost?</td>
+            <td class="mono">nearly the same compute</td>
+            <td>Whisper pads every input to 30 seconds. A 3-second chunk spends about ten times the compute per second of audio. <strong>Longer windows are what let one machine serve several speakers.</strong></td>
+          </tr>
+          <tr>
+            <td>Speech service startup and inference</td>
+            <td class="mono">cold load 0.83–1.35 s<br>inference 963–1227 ms</td>
+            <td>Both are small enough that the model is warmed once at startup and never per request.</td>
+          </tr>
+          <tr>
+            <td>Does the local model get the payload right?</td>
+            <td class="mono">“Tuesday at four” &rarr; “to that for”<br>“Tuesday at four” &rarr; “Tuesday and for”<br>“code 8842” &rarr; “they take for 2”</td>
+            <td><strong>No.</strong> Three independent occurrences, two verbs, separate processes. It reliably loses exactly the short spans this product exists to capture. See section&nbsp;22.</td>
+          </tr>
+          <tr>
+            <td>Does a naive date parse work?</td>
+            <td class="mono">“Tuesday at 4” &rarr; 04:00<br>“Monday morning” &rarr; 06:00<br>“this afternoon” &rarr; tomorrow</td>
+            <td>Four distinct traps, each needing its own rule. Section&nbsp;21.</td>
+          </tr>
+          <tr>
+            <td>Is the language-model quota the binding limit?</td>
+            <td class="mono">30 RPM · 6,000 TPM · <strong>1,000 per day</strong></td>
+            <td>The daily count, not the per-minute rate. At a four-second cadence the daily budget is gone in 55 minutes. It is shared by the whole team.</td>
+          </tr>
+          <tr>
+            <td>Is the speech quota the binding limit?</td>
+            <td class="mono">20 RPM · 2,000 per day</td>
+            <td>The plan said 30 RPM. It is 20, so a three-second chunk spends the entire allowance with nothing left for a retry.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head"><span class="num">21</span><h2>How a spoken time becomes a real date</h2></div>
+    <p class="sec-intro">
+      Section&nbsp;08 says the system understands <code>BOOK</code>. This is the part that turns the
+      speaker's words into something a calendar can accept, and it is the question a reader asks
+      first: the words are not a date, so where does the date come from?
+    </p>
+
+    <div class="flow">
+      <div class="fstep">
+        <div class="who">Spoken</div>
+        <div class="what"><b>“let us talk Tuesday at 4”</b> — the caller's own words.</div>
+      </div>
+      <div class="farrow">&darr;</div>
+      <div class="fstep">
+        <div class="who">T4</div>
+        <div class="what"><b>The extractor copies, it does not compute.</b> It reports <code>when_text: "Tuesday at 4"</code>. A resolved date is <strong>rejected</strong> by the verbatim gate, because it is not a substring of what was said.</div>
+      </div>
+      <div class="farrow">&darr;</div>
+      <div class="fstep event">
+        <div class="who">T6</div>
+        <div class="what"><b>The resolver, anchored to the moment of speech.</b> A phrase like that is meaningless alone: the same words mean a different day depending on when the call happened. Deterministic code, never the model.</div>
+      </div>
+      <div class="farrow">&darr;</div>
+      <div class="fstep">
+        <div class="who">Output</div>
+        <div class="what"><b>UTC with an explicit <code>Z</code></b>, in a calendar link and an <code>.ics</code> file.</div>
+      </div>
+    </div>
+
+    <div class="callout">
+      <strong>The model is never allowed to produce a date.</strong>
+      Language models are poor at “what date is next Tuesday”, and they fail silently. A wrong
+      invitation on somebody's calendar is worse than no invitation, so the model copies the words
+      and a parser does the arithmetic.
+    </div>
+
+    <h3 class="sub">The four traps, each measured before a rule was written</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Speaker says</th><th>A naive parse gives</th><th>The rule that fixes it</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="mono">Tuesday at 4</td>
+            <td class="mono">Tue 04:00 — a 4am meeting</td>
+            <td>A bare hour between 1 and 7, with no <code>am</code> or <code>pm</code> anywhere, is read as the afternoon.</td>
+          </tr>
+          <tr>
+            <td class="mono">Tuesday at 4<br><span class="mono">(said on a Wednesday)</span></td>
+            <td class="mono">last Tuesday — in the past</td>
+            <td>Anything that lands in the past is re-read as the next occurrence.</td>
+          </tr>
+          <tr>
+            <td class="mono">Monday morning</td>
+            <td class="mono">Mon 06:00</td>
+            <td><code>morning</code> means 09:00, <code>afternoon</code> 14:00, <code>evening</code> 18:00, <code>night</code> 20:00.</td>
+          </tr>
+          <tr>
+            <td class="mono">this afternoon</td>
+            <td class="mono">tomorrow afternoon</td>
+            <td><strong>The subtle one.</strong> “Prefer the future” is not a blanket setting: the tolerance applies only when the speaker pointed at today.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="sub">And the timezone trap</h3>
+    <p class="sec-intro">
+      Writing a local wall-clock time with no timezone makes a calendar in another zone show the
+      wrong <strong>day</strong>, not merely the wrong hour: a 16:00 booking in India renders as 22:30
+      the previous evening in UTC. Both the link and the <code>.ics</code> therefore carry UTC with an
+      explicit <code>Z</code>, which is unambiguous everywhere.
+    </p>
+
+    <h3 class="sub">Verified</h3>
+    <div class="code">
+<pre><span class="cm">// spoken on Wednesday 7 October 2026, mid-afternoon</span>
+"Tuesday at 4"  →  Tue 13 Oct 2026, 16:00 IST  →  Tue 13 Oct 2026, 16:30 IST
+
+<span class="cm">// the calendar link the handler produced</span>
+dates=20261013T103000Z/20261013T110000Z   <span class="cm">// 16:00–16:30 IST, thirty minutes</span>
+Google's endpoint responds HTTP 200
+
+<span class="cm">// and what it refuses, rather than guessing</span>
+"the 14th"       →  could not read a time from "the 14th"
+<span class="cm">// an unreadable time produces a visible failure, never a wrong invitation</span></pre>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head"><span class="num">22</span><h2>Hazards found while building</h2></div>
+    <p class="sec-intro">
+      Each of these cost time or would have cost the demo. They are recorded so nobody pays for them
+      twice. The list is maintained in <code>docs/REVIEWING.md</code> in the repository.
+    </p>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Hazard</th><th>What happens</th><th>The rule</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>Two participants on one machine</strong></td>
+            <td><span class="sev high">SEVERE</span> Two browser sessions share one output device, so each microphone re-captures the other's playback. The result is a feedback loop that echoes the user's own voice, and the pipeline genuinely re-captures it.</td>
+            <td>Never attach audio output when two participants share a machine. Verify a second participant by its connection state and its received track, <strong>never by listening</strong>. Headphones, or two machines, for any real two-party test.</td>
+          </tr>
+          <tr>
+            <td><strong>The local model loses the payload</strong></td>
+            <td><span class="sev high">SEVERE</span> Three independent occurrences across two verbs: a date became “to that for”, and a reference code became “they take for 2”.</td>
+            <td>Do not assume the local model carries the demo. Compare it against the large cloud model on a real human recording before the freeze.</td>
+          </tr>
+          <tr>
+            <td><code>NODE_ENV=production</code></td>
+            <td><span class="sev med">MODERATE</span> <code>npm install</code> silently omits every development dependency. The suite is missing and the failure looks like a broken checkout.</td>
+            <td>Always install with <code>--include=dev</code>.</td>
+          </tr>
+          <tr>
+            <td><strong>A peer joining an empty room</strong></td>
+            <td><span class="sev med">MODERATE</span> A join-order race: if the second participant arrives while the first is reloading, the first can receive no offer and never connects.</td>
+            <td>Known and unfixed. Join in order when demonstrating.</td>
+          </tr>
+          <tr>
+            <td><strong>Headless browser microphone</strong></td>
+            <td><span class="sev low">MINOR</span> Permission is denied by default, so the media path cannot be exercised.</td>
+            <td>Grant it over the debug protocol. Never with playback attached.</td>
+          </tr>
+          <tr>
+            <td><strong>Two Python version traps</strong></td>
+            <td><span class="sev med">MODERATE</span> The speech library is incompatible with the current hub version, and it calls a media function that does not exist in the version that resolves.</td>
+            <td>The pins live in <code>services/stt/pyproject.toml</code> and the lock is committed, so nobody has to remember them.</td>
+          </tr>
+          <tr>
+            <td><strong>A printed claim is not evidence</strong></td>
+            <td><span class="sev med">MODERATE</span> A build script printed “wrote server/model.ts” while the file was never written, and a record stated a completion time before its start time. Both were caught by verification, not by the report.</td>
+            <td>Verify by execution. Generated documents make drift visible instead of propagating it.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head"><span class="num">23</span><h2>How the work is tested</h2></div>
+    <p class="sec-intro">
+      Eighty tests across nine files, plus three verifications that run outside the suite. The
+      pattern worth copying: <strong>the refusals are tested as carefully as the successes.</strong>
+      A gate that is too strict is as broken as one that is too loose.
+    </p>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>File</th><th>Tests</th><th>What it proves</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">bus.test.ts</td><td class="mono">4</td><td>Order is preserved, unsubscribe works, the store mirrors every event.</td></tr>
+          <tr><td class="mono">contract.test.ts</td><td class="mono">4</td><td>A fourth verb is rejected. A reply with no evidence quote is rejected. An empty reply is accepted.</td></tr>
+          <tr><td class="mono">dispatcher.test.ts</td><td class="mono">3</td><td>An unregistered verb fails visibly rather than doing nothing quietly.</td></tr>
+          <tr><td class="mono">room.test.ts</td><td class="mono">9</td><td>A third peer sees both predecessors, so the room holds a list and not a pair. An offer never echoes to its sender.</td></tr>
+          <tr><td class="mono">gates.test.ts</td><td class="mono">23</td><td>Every gate, and every refusal: fabricated evidence, invented values, a resolved date, an unowned item.</td></tr>
+          <tr><td class="mono">extractor.test.ts</td><td class="mono">7</td><td>The filter prevents the model call. An unreachable model returns nothing <em>and reports why</em>.</td></tr>
+          <tr><td class="mono">fixtures.test.ts</td><td class="mono">7</td><td>All nineteen fixtures. A hallucinating model is caught on all eight empty cases.</td></tr>
+          <tr><td class="mono">when.test.ts</td><td class="mono">14</td><td>The four date traps, and that nothing resolves into the past.</td></tr>
+          <tr><td class="mono">calendar.test.ts</td><td class="mono">9</td><td>A real link with the right duration, and a visible failure for an unreadable time.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="sec-intro" style="margin-top:16px">Run outside the suite, because they need a live process:</p>
+    <ul class="plain">
+      <li><code>node server/verify-signal.mjs</code> &mdash; 10 of 10 signalling checks with two real clients.</li>
+      <li><code>node server/verify-gates.mjs</code> &mdash; 4 of 4 checks of the model proxy chain, without a model or a key.</li>
+      <li><code>services/stt/selftest.py</code> &mdash; generates speech, posts it, and asserts the text that comes back.</li>
+    </ul>
+  </section>
+
+  <section>
+    <div class="sec-head"><span class="num">24</span><h2>Where the plan and the build disagree</h2></div>
+    <p class="sec-intro">
+      Recorded rather than quietly reinterpreted, because a reader comparing this document with the
+      repository will find every one of these.
+    </p>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>The plan said</th><th>The build does</th><th>State</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>The speech quota is 30 requests per minute.</td>
+            <td>It is <strong>20</strong>. A three-second chunk spends the whole allowance with nothing left for a retry.</td>
+            <td><span class="sev low">CORRECTED</span></td>
+          </tr>
+          <tr>
+            <td>The language-model quota is 14,400 requests per day.</td>
+            <td>It is <strong>1,000</strong>, shared across the whole team. At a four-second cadence that is 55 minutes.</td>
+            <td><span class="sev low">CORRECTED</span></td>
+          </tr>
+          <tr>
+            <td>Gate 4 is <em>resolvable</em>: a date library parses the words into a real time.</td>
+            <td>T4 implemented it as <em>required</em> and left resolution to the calendar ticket, matching that ticket's own rule that <code>BOOK</code> never yields a resolved date.</td>
+            <td><span class="sev low">CLOSED</span> by T6. Resolution now exists and is tested, so section&nbsp;04 describes the current state.</td>
+          </tr>
+          <tr>
+            <td>The local speech model carries the live call, and the trade is latency.</td>
+            <td>It is not only latency. The local model is <strong>not accurate enough</strong> for the spans the product captures.</td>
+            <td><span class="sev high">OPEN</span> Needs one real human recording comparing it against the large cloud model.</td>
+          </tr>
+          <tr>
+            <td>Three developers work three branches and merge every two hours.</td>
+            <td>One branch so far. The tickets and the boards are ready for the others; the repository has a documented convention for the two files that will conflict.</td>
+            <td><span class="sev med">PENDING</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section style="margin-top:60px">
+    <div class="callout quiet">
+      <strong>What a reviewer should take from Part II.</strong>
+      The plumbing is real and tested: one seam, five interfaces, eighty tests, a genuine browser
+      call, a genuine speech service, and one genuine side effect. The intelligence is partially
+      real and deliberately narrow. What is missing is not knowledge — it is the three action
+      handlers, the wiring of the speech service, and one honest comparison of two speech models.
+      Every one of those is a known quantity with a ticket and a measured cost.
+    </div>
+  </section>
+
   <footer>
-    <span>VoxAction · Implementation Specification · revised 3 October 2026</span>
+    <span>VoxAction · Implementation Specification · plan revised 3 October 2026 · Part II added 2026-10-06 21:06 IST</span>
     <span class="mono">Writing style: ASD-STE100, simplified technical English</span>
   </footer>
 
