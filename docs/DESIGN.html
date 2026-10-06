@@ -306,7 +306,7 @@
 
   <div class="summary" style="margin-bottom:14px">
     <div class="cell"><div class="k">Tickets complete</div><div class="v accent">6 of 11</div></div>
-    <div class="cell"><div class="k">Tests passing</div><div class="v">88</div></div>
+    <div class="cell"><div class="k">Tests passing</div><div class="v">92</div></div>
     <div class="cell"><div class="k">Action handlers</div><div class="v">2 of 3</div></div>
     <div class="cell"><div class="k">Captions</div><div class="v">still scripted</div></div>
   </div>
@@ -1674,6 +1674,11 @@ Google's endpoint responds HTTP 200
             <td>The pins live in <code>services/stt/pyproject.toml</code> and the lock is committed, so nobody has to remember them.</td>
           </tr>
           <tr>
+            <td><strong>A hand-written list stops matching what it lists</strong></td>
+            <td><span class="sev high">SEVERE</span> The scripted call played a hand-written four turns while the script grew to six lines. A line added later fell off the end, was never spoken, and the action it demonstrated quietly stopped firing. Nothing failed: the suite stayed green and the cards still appeared, just fewer of them.</td>
+            <td>Derive the list from its source. A test now asserts every line is spoken and that the script still exercises all three verbs, because a demo that is quietly weaker than the README claims is worse than one that visibly breaks.</td>
+          </tr>
+          <tr>
             <td><strong>A printed claim is not evidence</strong></td>
             <td><span class="sev med">MODERATE</span> A build script printed “wrote server/model.ts” while the file was never written, and a record stated a completion time before its start time. Both were caught by verification, not by the report.</td>
             <td>Verify by execution. Generated documents make drift visible instead of propagating it.</td>
@@ -1686,7 +1691,7 @@ Google's endpoint responds HTTP 200
   <section>
     <div class="sec-head"><span class="num">23</span><h2>How the work is tested</h2></div>
     <p class="sec-intro">
-      Eighty-eight tests across ten files, plus three verifications that run outside the suite. The
+      Ninety-two tests across eleven files, plus three verifications that run outside the suite. The
       pattern worth copying: <strong>the refusals are tested as carefully as the successes.</strong>
       A gate that is too strict is as broken as one that is too loose.
     </p>
@@ -1705,6 +1710,7 @@ Google's endpoint responds HTTP 200
           <tr><td class="mono">when.test.ts</td><td class="mono">14</td><td>The four date traps, and that nothing resolves into the past.</td></tr>
           <tr><td class="mono">calendar.test.ts</td><td class="mono">9</td><td>A real link with the right duration, and a visible failure for an unreadable time.</td></tr>
           <tr><td class="mono">share.test.ts</td><td class="mono">8</td><td>What counts as a code: a word is refused, an unreadable string is refused, and the code is never altered.</td></tr>
+          <tr><td class="mono">script.test.ts</td><td class="mono">4</td><td>Every line of the scripted call is spoken, and the script still exercises all three verbs.</td></tr>
         </tbody>
       </table>
     </div>
