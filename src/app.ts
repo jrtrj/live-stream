@@ -3,7 +3,8 @@ import { InMemoryStore } from './core/store'
 import { WebRtcPeerManager } from './core/webrtc'
 import type { PeerManager } from './core/peer'
 import { FakeTranscriber, type Transcriber } from './core/transcriber'
-import { FakeExtractor, type Extractor } from './core/extractor'
+import { FakeExtractor, LlmExtractor, type Extractor } from './core/extractor'
+import { HttpModelClient } from './core/modelClient'
 import { createDispatcher, type Dispatcher } from './core/dispatcher'
 import {
   isTranscript,
@@ -17,6 +18,15 @@ const CLIENT: Speaker = { id: 'client', name: 'Client' }
 
 const SIGNAL_URL: string = import.meta.env?.VITE_SIGNAL_URL ?? 'ws://127.0.0.1:8787'
 const ROOM: string = import.meta.env?.VITE_ROOM ?? 'voxaction-demo'
+
+// The model is reached through the proxy, which holds the key. An empty value
+// means no extractor is configured and the fake is used instead, so the page
+// always works.
+const MODEL_URL: string = import.meta.env?.VITE_MODEL_URL ?? 'http://127.0.0.1:8788/extract'
+
+// Which extractor to use is an explicit choice, never a silent fallback. The
+// scripted one needs no model, no proxy and no key, so the page always works.
+const EXTRACTOR_MODE: string = import.meta.env?.VITE_EXTRACTOR ?? 'model'
 
 export interface App {
   readonly bus: EventBus
@@ -41,7 +51,19 @@ export function createApp(): App {
   const bus = createEventBus(store)
   const peers: PeerManager = new WebRtcPeerManager({ url: SIGNAL_URL, room: ROOM })
   const transcriber: Transcriber = new FakeTranscriber()
-  const extractor: Extractor = new FakeExtractor()
+  let modelNotice = ''
+  const extractor: Extractor =
+    EXTRACTOR_MODE === 'scripted'
+      ? new FakeExtractor()
+      : new LlmExtractor(
+          new HttpModelClient({
+            url: MODEL_URL,
+            // Empty by design. The key belongs to the proxy, never to the client.
+            apiKey: '',
+            model: 'proxy',
+          }),
+          { onError: (message) => { modelNotice = message } },
+        )
   const dispatcher = createDispatcher()
 
   const emitted = new Set<string>()
@@ -78,7 +100,7 @@ export function createApp(): App {
     dispatcher,
     speakers: { agent: AGENT, client: CLIENT },
     startedAt: () => began,
-    notice: () => message,
+    notice: () => message || modelNotice,
 
     async startCall(): Promise<void> {
       if (live) return

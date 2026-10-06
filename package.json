@@ -10,7 +10,9 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "typecheck": "tsc --noEmit",
-    "signal": "node server/signal.ts"
+    "signal": "node server/signal.ts",
+    "model": "node server/model.ts",
+    "verify": "npm run typecheck && npm test && node server/verify-gates.mjs"
   },
   "dependencies": {
     "react": "^19.0.0",
