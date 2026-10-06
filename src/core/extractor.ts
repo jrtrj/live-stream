@@ -107,6 +107,18 @@ export class FakeExtractor implements Extractor {
       })
     }
 
+    // a reference code: letters and digits, read off another screen
+    const code = last.text.match(/\b[A-Za-z]{1,6}-\d{3,6}\b|\b\d{3,6}\b/)
+    if (code) {
+      out.push({
+        speaker: last.speaker,
+        verb: 'SHARE',
+        payload: { verb: 'SHARE', code: code[0] },
+        confidence: 0.92,
+        evidence: last.text,
+      })
+    }
+
     // the timing words, taken verbatim from the line so the payload stays honest
     const when = last.text.match(
       /\b(?:this\s+|next\s+)?(?:monday|tuesday|wednesday|thursday|friday|saturday|sunday)\s+at\s+\d{1,2}(?::\d{2})?\s*(?:am|pm)?/i,

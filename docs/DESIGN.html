@@ -297,7 +297,7 @@
 
   <!-- ================= STATUS BANNER ================= -->
   <div class="callout" style="margin-bottom:20px">
-    <strong>Implementation status, 2026-10-06 21:06 IST — 3h 56m into a 24-hour window.</strong>
+    <strong>Implementation status, 2026-10-06 21:20 IST — 4h 10m into a 24-hour window.</strong>
     The window opened at 17:10 on 6 October. The plan below was written before it opened and is
     deliberately left unchanged, so that the disclosure in section&nbsp;14 stays true. Everything
     that has actually been built is recorded in <strong>Part II</strong>, at the end of this
@@ -305,9 +305,9 @@
   </div>
 
   <div class="summary" style="margin-bottom:14px">
-    <div class="cell"><div class="k">Tickets complete</div><div class="v accent">4 of 11</div></div>
-    <div class="cell"><div class="k">Tests passing</div><div class="v">80</div></div>
-    <div class="cell"><div class="k">Real side effects</div><div class="v">1 of 2</div></div>
+    <div class="cell"><div class="k">Tickets complete</div><div class="v accent">6 of 11</div></div>
+    <div class="cell"><div class="k">Tests passing</div><div class="v">88</div></div>
+    <div class="cell"><div class="k">Action handlers</div><div class="v">2 of 3</div></div>
     <div class="cell"><div class="k">Captions</div><div class="v">still scripted</div></div>
   </div>
 
@@ -1434,9 +1434,9 @@ Transcript, last turns:
           </tr>
           <tr>
             <td class="mono"><strong>T7</strong> SHARE</td>
-            <td><span class="sev high">NOT BUILT</span></td>
-            <td class="mono">—</td>
-            <td>Needs no external service. The cheapest remaining ticket.</td>
+            <td><span class="sev low">DONE</span></td>
+            <td class="mono">pending</td>
+            <td>A tap puts a format-checked reference code on the real system clipboard. Verified by reading the clipboard back.</td>
           </tr>
           <tr>
             <td class="mono"><strong>T8</strong> Receipt</td>
@@ -1481,8 +1481,9 @@ Transcript, last turns:
           <tr><td>Speech service</td><td><span class="sev low">REAL</span></td><td>Transcribes real audio. Verified end to end.</td></tr>
           <tr><td>Extraction: filter, model, gates</td><td><span class="sev low">REAL</span></td><td>57 tests, and the gates reject fabrication.</td></tr>
           <tr><td>BOOK to a calendar</td><td><span class="sev low">REAL</span></td><td>A real link with the right times. The tap is unverified.</td></tr>
+          <tr><td>SHARE to the clipboard</td><td><span class="sev low">REAL</span></td><td>The code really lands on the clipboard. Verified by reading it back.</td></tr>
           <tr><td><code>Transcriber</code> in the application</td><td><span class="sev high">FAKE</span></td><td><strong>The page is not listening.</strong> Captions are scripted.</td></tr>
-          <tr><td>Dispatcher handlers</td><td><span class="sev med">ONE OF THREE</span></td><td>BOOK fires. SEND and SHARE report a visible failure.</td></tr>
+          <tr><td>Dispatcher handlers</td><td><span class="sev med">TWO OF THREE</span></td><td>BOOK and SHARE fire. SEND reports a visible failure.</td></tr>
           <tr><td>Receipt, latency counter</td><td><span class="sev high">NOT BUILT</span></td><td>No end-of-call artefact.</td></tr>
           <tr><td>Event store</td><td><span class="sev med">ARRAY ONLY</span></td><td>A reload loses the call.</td></tr>
         </tbody>
@@ -1685,7 +1686,7 @@ Google's endpoint responds HTTP 200
   <section>
     <div class="sec-head"><span class="num">23</span><h2>How the work is tested</h2></div>
     <p class="sec-intro">
-      Eighty tests across nine files, plus three verifications that run outside the suite. The
+      Eighty-eight tests across ten files, plus three verifications that run outside the suite. The
       pattern worth copying: <strong>the refusals are tested as carefully as the successes.</strong>
       A gate that is too strict is as broken as one that is too loose.
     </p>
@@ -1703,6 +1704,7 @@ Google's endpoint responds HTTP 200
           <tr><td class="mono">fixtures.test.ts</td><td class="mono">7</td><td>All nineteen fixtures. A hallucinating model is caught on all eight empty cases.</td></tr>
           <tr><td class="mono">when.test.ts</td><td class="mono">14</td><td>The four date traps, and that nothing resolves into the past.</td></tr>
           <tr><td class="mono">calendar.test.ts</td><td class="mono">9</td><td>A real link with the right duration, and a visible failure for an unreadable time.</td></tr>
+          <tr><td class="mono">share.test.ts</td><td class="mono">8</td><td>What counts as a code: a word is refused, an unreadable string is refused, and the code is never altered.</td></tr>
         </tbody>
       </table>
     </div>

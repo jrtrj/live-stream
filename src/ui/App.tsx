@@ -9,6 +9,34 @@ function clock(ms: number): string {
   return `${minutes}:${seconds}`
 }
 
+type CopyState = 'idle' | 'copied' | 'failed'
+
+/**
+ * The tap. The clipboard belongs to the browser, so the copy happens here
+ * rather than in the handler, which decides only whether the code is worth
+ * copying.
+ */
+function CodeChip({ code }: { code: string }) {
+  const [state, setState] = useState<CopyState>('idle')
+
+  async function copy() {
+    try {
+      await navigator.clipboard.writeText(code)
+      setState('copied')
+    } catch {
+      // a silent failure would leave the user believing they had copied it
+      setState('failed')
+    }
+  }
+
+  return (
+    <button className={`chip-btn ${state}`} onClick={copy}>
+      <span className="mono">{code}</span>
+      {state === 'copied' ? ' · copied' : state === 'failed' ? ' · copy failed' : ' · tap to copy'}
+    </button>
+  )
+}
+
 export function App() {
   const app = useMemo(() => createApp(), [])
   const [events, setEvents] = useState<CallEvent[]>([])
@@ -105,6 +133,9 @@ export function App() {
                 <a className="link" href={action.artifact.ref} target="_blank" rel="noreferrer">
                   Add to calendar →
                 </a>
+              )}
+              {action?.status === 'fired' && action.artifact.kind === 'code' && (
+                <CodeChip code={action.artifact.ref} />
               )}
             </div>
           )

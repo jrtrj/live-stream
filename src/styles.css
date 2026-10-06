@@ -54,3 +54,17 @@ button:disabled { opacity: 0.4; cursor: default; }
 
 .link { color: var(--clay); font-size: 13px; text-decoration: none; font-weight: 600; }
 .link:hover { text-decoration: underline; }
+
+.chip-btn {
+  font: inherit; font-size: 13px; font-weight: 600;
+  align-self: flex-start;
+  background: #fff; color: var(--ink);
+  border: 1.5px solid var(--clay); border-radius: 999px;
+  padding: 4px 12px; cursor: pointer;
+}
+.chip-btn .mono { color: var(--ink); font-size: 12px; }
+.chip-btn:hover { background: #fff4ef; }
+.chip-btn.copied { background: var(--clay); color: #fff; border-color: var(--clay); }
+.chip-btn.copied .mono { color: #fff; }
+.chip-btn.failed { background: #fdeaea; color: #8a1f1f; border-color: #c0392b; }
+.chip-btn.failed .mono { color: #8a1f1f; }

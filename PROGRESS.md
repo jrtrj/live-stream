@@ -5,6 +5,44 @@ done, the evidence that proves it, and anything that was deferred.
 
 ---
 
+## 2026-10-06 21:20 - Completed T7: SHARE puts a reference code on the clipboard
+
+Second of the three verbs to have a real handler. Needs no external service.
+
+**Shipped**
+
+- `src/core/share.ts`, the format rule and the SHARE handler.
+- `CodeChip` in the interface: the tap, the copy, the confirmation.
+- Registered with one line in the composition root.
+
+**The split**
+
+The handler decides whether a code is worth copying. The component performs the copy, because the
+clipboard belongs to the browser. Each half is tested where it belongs: the rule by unit tests, the
+tap by a real click.
+
+**The rule**
+
+Three to sixteen characters, letters digits and dashes, and at least one digit. The digit is
+load-bearing: without it nothing separates a code from ordinary speech, and "the reference is
+brochure" would copy a word.
+
+**Evidence**
+
+- `npm test` - 10 files, 88 of 88 tests, up from 80.
+- The scripted call renders `SHARE | KX-4471 | fired | KX-4471 · tap to copy`.
+- The tap was performed and the clipboard read back from the operating system: `""` before,
+  `"KX-4471"` after.
+
+**Nothing in the contract changed.** `ActionEvent` already carried `kind: 'code'`. The frozen
+contract from T1 did its job.
+
+**Next**
+
+- T5, SEND, which is blocked on a Twilio account and is the only remaining verb.
+
+---
+
 ## 2026-10-06 19:29 - Completed T2, two browsers on a real call
 
 Real audio between two browser participants. The transcript is still scripted.

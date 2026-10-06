@@ -7,6 +7,7 @@ import { FakeExtractor, LlmExtractor, type Extractor } from './core/extractor'
 import { HttpModelClient } from './core/modelClient'
 import { createDispatcher, type Dispatcher } from './core/dispatcher'
 import { bookHandler } from './core/calendar'
+import { shareHandler } from './core/share'
 import {
   isTranscript,
   type IntentEvent,
@@ -68,6 +69,7 @@ export function createApp(): App {
   const dispatcher = createDispatcher()
   // T6. The dispatcher is a registry, so this is the whole integration.
   dispatcher.register('BOOK', bookHandler)
+  dispatcher.register('SHARE', shareHandler)
 
   const emitted = new Set<string>()
   let live = false
