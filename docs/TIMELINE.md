@@ -3,7 +3,7 @@
 Generated from the git history and the ticket records.
 **Do not edit by hand.** Regenerate with `npm run timeline`.
 
-Last generated: 2026-10-06 20:18 IST.
+Last generated: 2026-10-06 20:29 IST.
 
 ## Where the build stands
 
@@ -20,6 +20,7 @@ Times and commits in the table above come from git, not from the prose in the re
 
 | Time (IST) | Commit | Ticket | Summary |
 |---|---|---|---|
+| 2026-10-06 20:18 | `32375a9` | — documentation | docs: a generated timeline and a review guide for parallel reviewers |
 | 2026-10-06 19:47 | `93f074f` | 04 | T4: extraction with the cheap filter and five deterministic gates |
 | 2026-10-06 19:32 | `24d6d9f` | 03 (service) | T3 service, extraction fixtures, and the design document restored |
 | 2026-10-06 19:29 | `73cb834` | 02 | T2: two browsers on a real call |

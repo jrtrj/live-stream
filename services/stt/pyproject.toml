@@ -1,0 +1,16 @@
+[project]
+name = "voxaction-stt"
+version = "0.1.0"
+description = "Local speech-to-text service for VoxAction."
+requires-python = ">=3.12,<3.13"
+
+# faster-whisper 1.2.1 is incompatible with huggingface_hub 1.x, and it calls a
+# PyAV function that does not exist in the version resolvable here. Pinning the
+# hub below 1 is not cosmetic: without it the service fails at model load with
+# "open() got an unexpected keyword argument 'metadata_errors'". Pinned here so
+# nobody has to remember the flag.
+dependencies = [
+    "faster-whisper",
+    "huggingface_hub<1",
+    "numpy",
+]

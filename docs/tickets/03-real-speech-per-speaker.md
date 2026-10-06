@@ -71,3 +71,43 @@ Options, in order of preference:
 
 - The `Transcriber` implementation that calls this service and publishes transcript events.
 - The real recording comparison.
+
+## Third occurrence, and it breaks SHARE as well
+
+Spoken: *"Share the reference code eight eight four two."*
+Returned: **"Share the reference code they take for 2."**
+
+The code `8842` is destroyed. So the model does not only mangle dates: it mangles the reference
+codes that SHARE depends on. Three independent occurrences now, across two verbs, in separate
+processes and separate clips.
+
+| Spoken | Returned | Verb destroyed |
+|---|---|---|
+| "let us talk Tuesday at four" | "let us talk to that for" | BOOK |
+| "Tuesday at four" | "Tuesday and for" | BOOK |
+| "send me the brochure" | "and meet the brochure" | SEND (the item survives) |
+| "the reference code eight eight four two" | "the reference code they take for 2" | SHARE |
+
+Every clip was synthesised speech, which is harder than natural speech in places, so the exact
+error rate is not the claim. The claim is narrower and stronger: **`base.en` reliably loses the
+short, information-dense spans that this product exists to capture.** A date and a code are exactly
+those spans.
+
+This makes the real-recording comparison a blocking item, not a nice-to-have. It should happen
+before the freeze, and Groq `whisper-large-v3-turbo` is the candidate to beat it, because it is the
+large model and it was the original choice.
+
+## Dependency pinning moved into the service
+
+The two traps are now pinned in `services/stt/pyproject.toml` rather than carried as command-line
+flags, and `uv.lock` is committed so every teammate resolves the same versions. The simple form is
+now:
+
+```bash
+cd services/stt
+uv sync
+uv run python server.py
+```
+
+Verified: `huggingface_hub` resolves to 0.36.2, the service reports ready, and a posted clip
+transcribes. No virtual environment needs activating by hand.

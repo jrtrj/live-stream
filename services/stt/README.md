@@ -7,7 +7,20 @@ start time arrive as query parameters; the service never infers the speaker.
 
 ## Run command
 
-From the repository root, with the known-good `uv` invocation:
+The dependencies and both version pins live in `pyproject.toml`, so there is
+nothing to remember and no virtual environment to activate by hand:
+
+```bash
+cd services/stt
+uv sync                 # once, creates .venv and uv.lock from pyproject.toml
+uv run python server.py
+```
+
+`uv run` uses the project environment automatically. You never need to
+`source .venv/bin/activate`; activating is only useful if you want an editor to
+point at the interpreter.
+
+The equivalent one-liner, if you would rather not have a local environment:
 
 ```bash
 /home/loki/.hermes/bin/uv run --no-project --python 3.12 \
