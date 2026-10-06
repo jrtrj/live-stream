@@ -4,7 +4,7 @@
 **Started:** 2026-10-06 19:18 IST
 **Completed:** 2026-10-06 19:29 IST
 **Ticket:** `.scratch/voxaction/issues/02-two-browsers-real-call.md`
-**Commit:** pending
+**Commit:** 73cb834
 
 ## What was built
 
@@ -80,3 +80,10 @@ track from the other side.
   never by listening.
 - **Type errors from the first draft.** A private map named `peers` collided with the `peers()`
   method required by the interface, and a stored `local` field was never read.
+
+## Corrections
+
+An earlier revision of this record carried hand-written clock times that disagreed with the
+git history, in one case placing completion before the start. The commit times are the
+evidence; the step order is the narrative. `docs/TIMELINE.md` is generated from git and is
+the authority for when.

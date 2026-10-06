@@ -1,7 +1,7 @@
 # T4 — Extract intents, five gates, fixtures
 
 **Status:** complete
-**Started:** 2026-10-06 19:59 IST
+**Started:** 2026-10-06 19:32 IST
 **Completed:** 2026-10-06 19:47 IST
 **Ticket:** `.scratch/voxaction/issues/04-extract-intents-gates.md` · GitHub #4
 
@@ -100,3 +100,10 @@ its evidence quote.
   the action card from the offline demonstration. Fixed by making the mode explicit.
 - **The first proxy check was flaky** because it waited a fixed 700 ms; it now polls for readiness
   and reports a child's output if it dies.
+
+## Corrections
+
+An earlier revision of this record carried hand-written clock times that disagreed with the
+git history, in one case placing completion before the start. The commit times are the
+evidence; the step order is the narrative. `docs/TIMELINE.md` is generated from git and is
+the authority for when.

@@ -2,7 +2,7 @@
 
 **Status:** complete
 **Started:** 2026-10-06 18:57 IST
-**Completed:** 2026-10-06 19:12 IST
+**Completed:** 2026-10-06 19:07 IST
 **Ticket:** `.scratch/voxaction/issues/01-the-ground.md`
 **Commit:** `7d21100`
 
@@ -66,3 +66,10 @@ correct participant attribution, one action card, and the status
 - **Three subagents were dispatched and were interrupted within seconds,**
   producing no files. The speech service, the prompt with fixtures, and the
   WebRTC spike remain outstanding and are recorded as deferred.
+
+## Corrections
+
+An earlier revision of this record carried hand-written clock times that disagreed with the
+git history, in one case placing completion before the start. The commit times are the
+evidence; the step order is the narrative. `docs/TIMELINE.md` is generated from git and is
+the authority for when.

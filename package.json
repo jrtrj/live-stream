@@ -12,7 +12,8 @@
     "typecheck": "tsc --noEmit",
     "signal": "node server/signal.ts",
     "model": "node server/model.ts",
-    "verify": "npm run typecheck && npm test && node server/verify-gates.mjs"
+    "verify": "npm run typecheck && npm test && node server/verify-gates.mjs",
+    "timeline": "node scripts/timeline.mjs"
   },
   "dependencies": {
     "react": "^19.0.0",
