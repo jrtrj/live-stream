@@ -19,6 +19,9 @@ Last updated: 2026-10-06 19:17 IST.
 
 - VoxAction is an action layer for a phone line. During a live call, three spoken verbs become one-tap actions, and the call ends with a receipt of what was agreed.
 - Built inside the Cooee hackathon window, 6-7 October 2026. Track: Real-Time Communication.
+- **VoxAction is the project name. Sigzero is the team name**, and it is also the name of the
+  organization repository that holds this work. A mismatch between the two is expected and is
+  not a conflict.
 - The design is `docs/DESIGN.html`. It holds the scope boundary, the free stack with measured numbers, the latency budget, the phases, and the rejected alternatives.
 - **All code is written inside the window.** The rules forbid a pre-built or partially completed project. Decisions, accounts, and designs prepared beforehand are permitted and are recorded as such.
 
