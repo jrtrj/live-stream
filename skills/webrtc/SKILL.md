@@ -37,6 +37,25 @@ voice physically present in the room.
 - Separate rooms: correct.
 - One room on speakers: broken, and it looks like a model problem but is not.
 
+## Never test two participants on one machine with playback on
+
+This is the sharpest trap in the project, and it has already been triggered once.
+
+Two browser sessions on one machine share one output device. Each session captures the
+microphone, receives the other session's audio, and plays it through the speakers. The
+microphone then hears that playback and sends it back. The result is a feedback loop that
+echoes the user's own voice, and the pipeline genuinely re-captures it.
+
+Rules:
+
+- Verify a second participant by its **connection state** and its **received audio track**.
+  Never by listening.
+- When a second participant must exist on the same machine, do not attach audio output at all.
+- If playback is required, use headphones, or virtual audio devices, or one participant only.
+
+Echo cancellation does not save you here. It cancels what a device plays, and in this
+configuration that playback is exactly what must not be re-captured.
+
 ## Mesh, not a server
 
 There is no media server. Every participant connects to every other participant.

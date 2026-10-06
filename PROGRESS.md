@@ -5,6 +5,46 @@ done, the evidence that proves it, and anything that was deferred.
 
 ---
 
+## 2026-10-06 19:29 - Completed T2, two browsers on a real call
+
+Real audio between two browser participants. The transcript is still scripted.
+
+**Shipped**
+
+- The signalling room as pure, tested logic, and a thin WebSocket server over it.
+- `WebRtcPeerManager`, the real implementation behind the existing interface.
+- A call timer, a visible link state, and the headphones warning in the interface.
+
+**Evidence**
+
+- `npm test` - 20 of 20 tests pass across 4 files.
+- `node server/verify-signal.mjs` - 10 of 10 signalling checks pass with real clients.
+- Two isolated browser sessions both reported two participants, a connected link, and a live
+  audio track from the other side.
+
+**Problems found and corrected**
+
+- Three real type errors in the first draft: a private field collided with the `peers()` method
+  required by the interface, an unused field, and a missing signal kind.
+- Headless Chromium denies the microphone; `Browser.grantPermissions` over CDP fixes it.
+- A join-order race: a peer that joins an empty room can receive no offer. Recorded as a known
+  issue, not fixed.
+- **A feedback loop echoed the developer's own voice.** Two browser participants on one machine
+  share one output device, so each microphone re-captured the other's playback. Everything was
+  stopped and the microphones were released. The rule is now in `AGENTS.md` and
+  `skills/webrtc/SKILL.md`.
+
+**Deferred**
+
+- Real display names for remote participants.
+- The transcript is still scripted; T3 makes it real.
+
+**Next**
+
+- T3, real speech per speaker.
+
+---
+
 ## 2026-10-06 19:17 - Completed T1, the ground
 
 Built the skeleton that every later ticket attaches to.

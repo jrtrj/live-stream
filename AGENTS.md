@@ -30,6 +30,11 @@ Last updated: 2026-10-06 19:17 IST.
 - **The speaker is supplied, never inferred.** Each participant's own machine knows who is speaking, so no diarisation is performed.
 - **One seam.** Three event types cross one event bus. A later phase adds a publisher or a subscriber. It never edits the contract.
 - **Every capability sits behind an interface.** Swapping a fake for a real implementation happens in the composition root and nowhere else.
+- **NEVER enable audio playback when two participants share one machine.** Two participants on
+  one machine with one output device create a feedback loop: each session captures what the
+  speakers play and sends it back. This was done once and it echoed the user's own voice. Verify a
+  second peer by its connection state and its received track, never by listening. If playback is
+  genuinely required, it must be one participant only, or headphones, or virtual audio devices.
 - **Headphones are mandatory** for any two-participant test. Without acoustic isolation each microphone hears the other speaker, so one sentence is transcribed twice under two identities. Echo cancellation does not correct a voice physically present in the room.
 
 ### The frozen contract

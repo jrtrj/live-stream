@@ -1,6 +1,7 @@
 import { createEventBus, type EventBus } from './core/bus'
 import { InMemoryStore } from './core/store'
-import { FakePeerManager, type PeerManager } from './core/peer'
+import { WebRtcPeerManager } from './core/webrtc'
+import type { PeerManager } from './core/peer'
 import { FakeTranscriber, type Transcriber } from './core/transcriber'
 import { FakeExtractor, type Extractor } from './core/extractor'
 import { createDispatcher, type Dispatcher } from './core/dispatcher'
@@ -14,6 +15,9 @@ import {
 const AGENT: Speaker = { id: 'agent', name: 'Agent' }
 const CLIENT: Speaker = { id: 'client', name: 'Client' }
 
+const SIGNAL_URL: string = import.meta.env?.VITE_SIGNAL_URL ?? 'ws://127.0.0.1:8787'
+const ROOM: string = import.meta.env?.VITE_ROOM ?? 'voxaction-demo'
+
 export interface App {
   readonly bus: EventBus
   readonly peers: PeerManager
@@ -21,6 +25,8 @@ export interface App {
   readonly speakers: { agent: Speaker; client: Speaker }
   startCall(): Promise<void>
   hangUp(): void
+  startedAt(): number
+  notice(): string
 }
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms))
@@ -33,12 +39,15 @@ const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms))
 export function createApp(): App {
   const store = new InMemoryStore()
   const bus = createEventBus(store)
-  const peers: PeerManager = new FakePeerManager(CLIENT)
+  const peers: PeerManager = new WebRtcPeerManager({ url: SIGNAL_URL, room: ROOM })
   const transcriber: Transcriber = new FakeTranscriber()
   const extractor: Extractor = new FakeExtractor()
   const dispatcher = createDispatcher()
 
   const emitted = new Set<string>()
+  let live = false
+  let began = 0
+  let message = ''
 
   // Speech to intent. The extractor reads the rolling window; each new intent
   // is published onto the same bus it arrived from.
@@ -63,17 +72,28 @@ export function createApp(): App {
     void dispatcher.dispatch(e).then((action) => bus.publish(action))
   })
 
-  let live = false
-
   return {
     bus,
     peers,
     dispatcher,
     speakers: { agent: AGENT, client: CLIENT },
+    startedAt: () => began,
+    notice: () => message,
+
     async startCall(): Promise<void> {
       if (live) return
       live = true
-      await peers.join(AGENT, () => {})
+      began = Date.now()
+
+      // The call is real. If there is no microphone or no signalling server,
+      // the failure is reported rather than hidden, and the transcript script
+      // still runs so the rest of the path can be demonstrated.
+      try {
+        await peers.join(AGENT, () => {})
+      } catch (error) {
+        message = `no audio yet: ${(error as Error).message}`
+      }
+
       await transcriber.warmup()
       const order: Speaker[] = [CLIENT, AGENT, CLIENT, AGENT]
       for (const who of order) {
@@ -82,6 +102,7 @@ export function createApp(): App {
         await sleep(1100)
       }
     },
+
     hangUp(): void {
       live = false
       peers.leave()

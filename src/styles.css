@@ -44,3 +44,10 @@ button:disabled { opacity: 0.4; cursor: default; }
 }
 .verb { font-family: var(--mono); font-size: 12px; font-weight: 700; color: var(--clay); }
 .evidence { font-size: 13px; color: var(--muted); }
+
+.notice { color: var(--clay); font-size: 13px; margin: 6px 0 0; }
+.warn {
+  border: 1.5px solid var(--line); border-left: 3px solid var(--clay);
+  border-radius: 9px; padding: 10px 14px; margin: 14px 0 0;
+  font-size: 13px; background: #fff;
+}
