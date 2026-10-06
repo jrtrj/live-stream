@@ -159,3 +159,26 @@ PASS: transcript = 'and meet the brochure and let us talk to that for.'
 The synthetic `espeak-ng` voice is imperfect, so the transcript is approximate.
 The assertion is that the text is non-empty and that `speaker` and `t_ms`
 survive the round trip.
+
+## Starting it twice
+
+Starting the service when one is already running used to produce a raw Python
+traceback ending in `OSError: [Errno 98] Address already in use`. The error was
+correct but unreadable, and the model had already loaded by the time it
+appeared.
+
+It now says what happened and what to do:
+
+```
+[stt] port 8756 is already in use, so another instance is running.
+[stt] either stop that one, or start this on another port:
+        STT_PORT=8757 uv run python server.py
+```
+
+The port is configurable with `STT_PORT`. That matters when two people share a
+machine, or when you want the app pointed at one instance while you test
+another.
+
+Note that inference is serialised behind a lock even though the HTTP server is
+threaded. One four-core CPU cannot serve several streams at once, so requests
+queue rather than compete. This is why a second speaker needs longer windows.

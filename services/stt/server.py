@@ -12,6 +12,7 @@ stream inputs and PyAV does not resolve on this machine.
 """
 
 import json
+import os
 import threading
 import time
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
@@ -26,7 +27,7 @@ DEVICE = "cpu"
 COMPUTE_TYPE = "int8"
 CPU_THREADS = 4
 HOST = "127.0.0.1"
-PORT = 8756
+PORT = int(os.environ.get("STT_PORT", "8756"))
 
 _model = None
 _ready = False
@@ -174,7 +175,26 @@ def main():
         + " s",
         flush=True,
     )
-    server = ThreadingHTTPServer((HOST, PORT), Handler)
+    try:
+        server = ThreadingHTTPServer((HOST, PORT), Handler)
+    except OSError as exc:
+        # The most common way to hit this is starting the service twice. Say so
+        # plainly instead of showing a raw traceback: the cost of the failure is
+        # that the model was already loaded, and the fix is one command.
+        if exc.errno == 98:
+            print(
+                "[stt] port "
+                + str(PORT)
+                + " is already in use, so another instance is running.",
+                flush=True,
+            )
+            print(
+                "[stt] either stop that one, or start this on another port:\n"
+                "        STT_PORT=8757 uv run python server.py",
+                flush=True,
+            )
+            raise SystemExit(1)
+        raise
     print("[stt] listening on http://" + HOST + ":" + str(PORT), flush=True)
     try:
         server.serve_forever()
