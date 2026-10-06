@@ -21,6 +21,18 @@ export const SCRIPTED_TURNS = [
   'thanks, that is all I needed',
 ] as const
 
+/**
+ * One turn per scripted line, alternating between two speakers.
+ *
+ * Derived from the script rather than written out by hand. A hand-written order
+ * stops covering the script the moment a line is added, and the line that falls
+ * off the end is silently never spoken — so the action it demonstrates never
+ * fires, and the demo is quietly weaker than it claims to be.
+ */
+export function turnsFor(lines: readonly string[], a: Speaker, b: Speaker): Speaker[] {
+  return lines.map((_, i) => (i % 2 === 0 ? a : b))
+}
+
 /** T1 fake: ignores audio and replays a script, attributed to the caller. */
 export class FakeTranscriber implements Transcriber {
   private i = 0

@@ -2,7 +2,7 @@ import { createEventBus, type EventBus } from './core/bus'
 import { InMemoryStore } from './core/store'
 import { WebRtcPeerManager } from './core/webrtc'
 import type { PeerManager } from './core/peer'
-import { FakeTranscriber, type Transcriber } from './core/transcriber'
+import { FakeTranscriber, SCRIPTED_TURNS, turnsFor, type Transcriber } from './core/transcriber'
 import { FakeExtractor, LlmExtractor, type Extractor } from './core/extractor'
 import { HttpModelClient } from './core/modelClient'
 import { createDispatcher, type Dispatcher } from './core/dispatcher'
@@ -122,7 +122,8 @@ export function createApp(): App {
       }
 
       await transcriber.warmup()
-      const order: Speaker[] = [CLIENT, AGENT, CLIENT, AGENT]
+      // Derived from the script, so a new line is always spoken.
+      const order = turnsFor(SCRIPTED_TURNS, CLIENT, AGENT)
       for (const who of order) {
         const event = await transcriber.transcribe(new Float32Array(0), who, Date.now())
         if (event) bus.publish(event)
